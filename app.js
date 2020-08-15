@@ -12,7 +12,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 router.get('/sync', async function(request, response, next) {
-  response.send({ immediate: 'Now', postponed: 'or never!' })
+  const immediate = Promise.resolve("Now");
+  const postponed = new Promise((resolve) => setTimeout(() => resolve("or never!"), 1000));
+  response.send({ immediate: await immediate, postponed: await postponed });
 });
 
 router.get('/streaming', async function(request, response, next) {
