@@ -4,11 +4,19 @@ This application demonstrates my trouble with streaming responses from Express.j
 
 ## The problem
 
- 1. My end-to-end tests doesn't pass anymore (seems like they doesn't wait for all the data)
+ 1. **SOLVED** My end-to-end tests doesn't pass anymore (seems like they doesn't wait for all the data)
 
     ```js
     expect((await request(app).get('/streaming')).body).toEqual({some: 'result'}); // But it gets {} instead of {"some":"result"}
     ```
+
+    Solution: set response type to `json` before streaming:
+
+    ```js
+    response.type('json');
+    ```
+
+    See [Faleij/json-stream-stringify#15 (comment)](https://github.com/Faleij/json-stream-stringify/issues/15#issuecomment-674257256) for details.
 
  2. In logs wrong request runtime is being reported (request took 10 seconds but it says that it took 1 second, and no response body size info present, I suppose that it is time to first results being streamed):
 

@@ -18,6 +18,7 @@ router.get('/sync', async function(request, response, next) {
 });
 
 router.get('/streaming', async function(request, response, next) {
+  response.type('json'); // This is solution for test failures, see https://github.com/Faleij/json-stream-stringify/issues/15
   const immediate = Promise.resolve("Now");
   const postponed = new Promise((resolve) => setTimeout(() => resolve("or never!"), 1000));
   new JsonStreamStringify({ immediate, postponed }).pipe(response);
